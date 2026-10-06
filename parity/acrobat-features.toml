@@ -9795,7 +9795,7 @@ status = "partial"
 commands = []
 tools = []
 evidence = ["crates/ui-egui/src/i18n.rs::language_persists_and_invalid_input_keeps_current_language"]
-notes = "Preferences switches English/Japanese and persists; ui.set language en|ja and ui.state expose it. Core menu labels translated; broader dialog/panel translations and additional languages remain open."
+notes = "Preferences switches English/Japanese/Czech and persists; ui.set language en|ja|cs and ui.state expose it. Czech covers every registered menu command (tested); Japanese covers the core menu labels. Dialog/panel translations and more languages remain open."
 
 [[feature]]
 id = "misc.prefs-reading"

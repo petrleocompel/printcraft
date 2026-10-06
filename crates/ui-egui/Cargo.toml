@@ -40,3 +40,5 @@ printcraft-cos = { workspace = true }
 printcraft-model = { workspace = true }
 egui_kittest = { workspace = true, features = ["eframe", "wgpu"] }
 image = { version = "0.25", default-features = false, features = ["png"] }
+# Glyph-coverage test of the interface fonts; already in the tree via egui.
+skrifa = "0.44"

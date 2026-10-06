@@ -105,6 +105,12 @@ impl Tokens {
 }
 
 pub fn install_fonts(ctx: &egui::Context) {
+    ctx.set_fonts(font_definitions());
+}
+
+/// The interface fonts: Inter (and JetBrains Mono for code) first, Shippori Mincho as the
+/// fallback for Japanese.
+fn font_definitions() -> FontDefinitions {
     let mut fonts = FontDefinitions::default();
     let add = |fonts: &mut FontDefinitions, name: &str, bytes: &'static [u8]| {
         fonts.font_data.insert(name.to_owned(), Arc::new(FontData::from_static(bytes)));
@@ -125,7 +131,7 @@ pub fn install_fonts(ctx: &egui::Context) {
         stack.extend(fallback.iter().cloned());
         fonts.families.insert(FontFamily::Name(fam.into()), stack);
     }
-    ctx.set_fonts(fonts);
+    fonts
 }
 
 pub fn regular(size: f32) -> FontId {
@@ -182,4 +188,30 @@ pub fn apply(ctx: &egui::Context, kind: ThemeKind) {
         s.text_styles.insert(egui::TextStyle::Heading, semibold(17.0));
         s.interaction.tooltip_delay = 0.35;
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use skrifa::MetadataProvider as _;
+
+    /// The primary interface fonts draw Czech (and every Czech translation) themselves, so no
+    /// letter falls back to the Japanese Mincho face.
+    #[test]
+    fn primary_ui_fonts_cover_czech() {
+        let mut text = String::from("áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ…");
+        text.push_str(crate::i18n::Language::Cs.name());
+        for (_, cs) in crate::i18n::Language::Cs.table() {
+            text.push_str(cs);
+        }
+        let fonts = super::font_definitions();
+        for name in ["Inter", "Inter-Medium", "Inter-SemiBold", "JetBrainsMono"] {
+            let data = &fonts.font_data[name];
+            let font = skrifa::FontRef::from_index(&data.font, data.index).unwrap();
+            let charmap = font.charmap();
+            let mut missing: Vec<char> = text.chars().filter(|c| !c.is_whitespace() && charmap.map(*c).is_none()).collect();
+            missing.sort_unstable();
+            missing.dedup();
+            assert!(missing.is_empty(), "{name} lacks {missing:?}");
+        }
+    }
 }
