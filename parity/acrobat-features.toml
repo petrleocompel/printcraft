@@ -1,4 +1,4 @@
-# PrintCraft parity checklist vs Acrobat Pro (offline feature set). Generated from plan docs; maintained by hand.
+# PdfCraft parity checklist vs Acrobat Pro (offline feature set). Generated from plan docs; maintained by hand.
 # Validated and reported by `cargo xtask parity`. Schema: see the [schema] table.
 # Status rules: `shipped` = usable today with at least one cited test; `partial` = part exists (notes say what is
 # missing); `planned` = not started; `na` = Adobe-cloud-only (notes name the local or pluggable alternative).
@@ -22,8 +22,8 @@ milestone = "M1"
 status = "shipped"
 commands = ["file.open"]
 tools = ["doc_open"]
-evidence = ["crates/automation/tests/automation.rs::open_inspect_render_and_find", "crates/ui-egui/tests/ui.rs::opening_a_pdf_shows_comments_and_bookmarks"]
-notes = ""
+evidence = ["crates/automation/tests/automation.rs::open_inspect_render_and_find", "crates/ui-egui/tests/ui.rs::opening_a_pdf_shows_comments_and_bookmarks", "crates/ui-egui/tests/ui.rs::files_and_quit_from_the_operating_system"]
+notes = "File ▸ Open, the command line (Linux and Windows file associations), and on macOS Finder, Open With and the Dock (Apple events; the bundle declares PDF as a document type)"
 
 [[feature]]
 id = "core.repair-broken-files"
@@ -842,8 +842,8 @@ milestone = "M3"
 status = "shipped"
 commands = []
 tools = []
-evidence = ["crates/ui-egui/tests/view.rs::two_up_layout_places_pages_side_by_side"]
-notes = ""
+evidence = ["crates/ui-egui/tests/view.rs::two_up_layout_places_pages_side_by_side", "crates/ui-egui/tests/viewer.rs::two_page_view_steps_a_spread_at_a_time"]
+notes = "next/previous page step a spread at a time"
 
 [[feature]]
 id = "view.layout-two-up-scrolling"
@@ -1106,8 +1106,8 @@ milestone = "M3"
 status = "shipped"
 commands = []
 tools = []
-evidence = ["crates/ui-egui/tests/control.rs::state_and_view_options", "crates/ui-egui/tests/ui.rs::theme_and_view_options_apply"]
-notes = ""
+evidence = ["crates/ui-egui/tests/control.rs::state_and_view_options", "crates/ui-egui/tests/ui.rs::theme_and_view_options_apply", "crates/ui-egui/tests/viewer.rs::two_page_view_steps_a_spread_at_a_time"]
+notes = "in two-page view, next and previous page move a whole spread (with or without a cover page)"
 
 [[feature]]
 id = "view.goto-page-label"
@@ -1586,8 +1586,8 @@ milestone = "M3"
 status = "shipped"
 commands = ["view.theme"]
 tools = []
-evidence = ["crates/ui-egui/tests/ui.rs::theme_and_view_options_apply"]
-notes = ""
+evidence = ["crates/ui-egui/tests/ui.rs::theme_and_view_options_apply", "crates/ui-egui/src/theme.rs::text_is_readable_on_every_surface"]
+notes = "every text colour meets WCAG AA (4.5:1) on every surface in both themes; glyphs are pixel-aligned for sharper text at 100–150 % scaling"
 
 [[feature]]
 id = "view.theme-system"
@@ -1694,7 +1694,7 @@ milestone = "M3"
 status = "partial"
 commands = ["help.check_updates"]
 tools = []
-evidence = ["crates/ui-egui/tests/updates.rs::a_newer_release_is_offered_for_download", "crates/ui-egui/tests/updates.rs::nothing_is_asked_until_the_user_checks", "apps/printcraft/src/updates.rs::answers_are_read_and_only_our_release_pages_are_offered"]
+evidence = ["crates/ui-egui/tests/updates.rs::a_newer_release_is_offered_for_download", "crates/ui-egui/tests/updates.rs::nothing_is_asked_until_the_user_checks", "apps/pdfcraft/src/updates.rs::answers_are_read_and_only_our_release_pages_are_offered"]
 notes = "asks GitHub Releases on request and offers the release page. By the owner's decision there is no check at start and no in-place install (Acrobat has both)"
 
 [[feature]]
@@ -1938,8 +1938,8 @@ milestone = "M7"
 status = "shipped"
 commands = ["edit.text"]
 tools = ["page_add_text", "content_update"]
-evidence = ["crates/ui-egui/tests/content.rs::typing_moving_styling_and_deleting_added_content", "crates/automation/tests/automation.rs::adding_content_through_tools", "crates/edit/src/tests.rs::added_text_and_images_are_page_content_that_stays_editable", "crates/engine/src/tests.rs::added_text_and_images_render_and_stay_editable"]
-notes = "page content, editable later (retype, move, restyle); standard fonts, Windows-1252 text"
+evidence = ["crates/ui-egui/tests/content.rs::typing_moving_styling_and_deleting_added_content", "crates/ui-egui/tests/content.rs::clicking_elsewhere_keeps_the_text_and_starts_a_new_box", "crates/automation/tests/automation.rs::adding_content_through_tools", "crates/edit/src/tests.rs::added_text_and_images_are_page_content_that_stays_editable", "crates/engine/src/tests.rs::added_text_and_images_render_and_stay_editable"]
+notes = "page content, editable later (retype, move, restyle); standard fonts, Windows-1252 text. Each click on the page keeps the box being typed and starts a new one; Done and Discard beside the box"
 
 [[feature]]
 id = "edit.find-replace"
@@ -2323,7 +2323,7 @@ status = "shipped"
 commands = ["edit.header_footer.update", "edit.header_footer.remove"]
 tools = ["doc_header_footer", "doc_remove_marks"]
 evidence = ["crates/edit/src/tests.rs::replace_and_remove_restore_the_original_content", "crates/ui-egui/tests/marks.rs::header_and_footer_dialog_inserts_tokens_and_applies_to_a_subset"]
-notes = "recognises PrintCraft marks; Acrobat-made headers are not detected yet"
+notes = "recognises PdfCraft marks; Acrobat-made headers are not detected yet"
 
 [[feature]]
 id = "edit.header-footer-tokens"
@@ -3471,7 +3471,7 @@ status = "partial"
 commands = []
 tools = ["comment_add"]
 evidence = ["crates/annot/src/tests.rs::every_tool_creates_a_drawable_comment", "crates/engine/src/tests.rs::highlight_multiplies_over_text", "crates/annot/src/tests.rs::polygons_clouds_connected_lines_callouts_and_carets_are_drawn"]
-notes = "appearances for every type PrintCraft creates (highlight multiplies; clouds, callouts, stamps, polygons, carets); rich text not yet"
+notes = "appearances for every type PdfCraft creates (highlight multiplies; clouds, callouts, stamps, polygons, carets); rich text not yet"
 
 [[feature]]
 id = "comment.sticky-note"
@@ -3987,7 +3987,7 @@ status = "shipped"
 commands = ["comment.stamp"]
 tools = ["comment_add"]
 evidence = ["crates/annot/src/tests.rs::stamps_draw_their_label_and_by_line", "crates/ui-egui/tests/stamps.rs::choosing_and_placing_stamps", "crates/automation/tests/automation.rs::stamps_through_tools"]
-notes = "12 standard business stamps in PrintCraft's own design; ISO 32000 stamp names where defined"
+notes = "12 standard business stamps in PdfCraft's own design; ISO 32000 stamp names where defined"
 
 [[feature]]
 id = "comment.stamps-sign-here"
@@ -4650,8 +4650,8 @@ milestone = "M6"
 status = "shipped"
 commands = ["form.prepare"]
 tools = ["form_add_field", "form_set_props", "form_delete_field"]
-evidence = ["crates/ui-egui/tests/prepare.rs::placing_moving_editing_and_deleting_a_field", "crates/engine/src/tests.rs::preparing_a_form_adds_renames_and_deletes_fields"]
-notes = "fields shown with blue fill and name tags; select, move, resize by corners, Delete; field tools return to Select after one field"
+evidence = ["crates/ui-egui/tests/prepare.rs::placing_moving_editing_and_deleting_a_field", "crates/ui-egui/tests/prepare.rs::deleting_several_selected_fields_and_detecting_fields_from_the_panel", "crates/engine/src/tests.rs::preparing_a_form_adds_renames_and_deletes_fields"]
+notes = "fields shown with blue fill and name tags; select, move, resize by corners, Delete (every selected field, one undo step); field tools return to Select after one field. Not yet: editing shared properties of several fields at once"
 
 [[feature]]
 id = "form.add-text-field"
@@ -4688,6 +4688,18 @@ commands = ["form.add.radio"]
 tools = ["form_add_field"]
 evidence = ["crates/forms/src/tests.rs::every_field_type_can_be_added_named_and_drawn", "crates/automation/tests/automation.rs::preparing_a_form_through_tools"]
 notes = "new group Group1… or join the selected group with the next ChoiceN"
+
+[[feature]]
+id = "form.check-box-style"
+title = "Check box and radio button styles"
+area = "F"
+tier = "P1"
+milestone = "M6"
+status = "shipped"
+commands = ["form.field.properties"]
+tools = ["form_set_props", "form_fields"]
+evidence = ["crates/forms/src/tests.rs::check_box_styles_change_the_mark", "crates/ui-egui/tests/prepare.rs::options_tab_sets_the_check_box_style", "crates/automation/tests/automation.rs::preparing_a_form_through_tools"]
+notes = "Field Properties ▸ Options: check, circle, cross, diamond, square, star (/MK /CA, Acrobat's codes), drawn as paths; defaults check (check boxes) and circle (radio buttons)"
 
 [[feature]]
 id = "form.add-dropdown"
@@ -4986,8 +4998,8 @@ milestone = "M6"
 status = "partial"
 commands = ["form.detect", "form.prepare"]
 tools = ["form_detect_fields"]
-evidence = ["crates/forms/src/tests.rs::detection_finds_blanks_rules_boxes_and_names_them", "crates/engine/src/tests.rs::detecting_fields_on_a_printed_form", "crates/automation/tests/automation.rs::detecting_form_fields_through_tools", "crates/ui-egui/tests/javascript.rs::prepare_a_form_detects_fields_on_a_paper_form"]
-notes = "Underscore runs, rules, empty boxes and small squares (check boxes); runs when Prepare a form starts on a document without fields. Not yet: comb boxes, tables of cells, scanned forms (needs OCR first), radio groups."
+evidence = ["crates/forms/src/tests.rs::detection_finds_blanks_rules_boxes_and_names_them", "crates/engine/src/tests.rs::detecting_fields_on_a_printed_form", "crates/automation/tests/automation.rs::detecting_form_fields_through_tools", "crates/ui-egui/tests/javascript.rs::prepare_a_form_detects_fields_on_a_paper_form", "crates/ui-egui/tests/prepare.rs::deleting_several_selected_fields_and_detecting_fields_from_the_panel"]
+notes = "Underscore runs, rules, empty boxes and small squares (check boxes); runs when Prepare a form starts on a document without fields, and from Prepare a form ▸ Detect form fields at any time (existing fields are skipped). Not yet: comb boxes, tables of cells, scanned forms (needs OCR first), radio groups."
 
 [[feature]]
 id = "form.auto-name-fields"
@@ -5179,7 +5191,7 @@ status = "shipped"
 commands = ["sign.fill.check", "sign.fill.cross", "sign.fill.dot", "sign.fill.line"]
 tools = ["fill_sign_add"]
 evidence = ["crates/ui-egui/tests/fill_sign.rs::text_marks_and_date", "crates/annot/src/tests.rs::fill_and_sign_items_are_drawn"]
-notes = "PrintCraft-drawn stamps"
+notes = "PdfCraft-drawn stamps"
 
 [[feature]]
 id = "form.fill-sign-date"
@@ -6850,8 +6862,8 @@ milestone = "M10"
 status = "partial"
 commands = ["export.docx"]
 tools = ["doc_export_office"]
-evidence = ["crates/export/src/lib.rs::docx_is_a_word_package", "crates/export/src/lib.rs::grid_text_becomes_a_real_table_in_every_format", "crates/engine/src/tests.rs::exporting_office_files_keeps_images", "crates/automation/tests/automation.rs::exporting_to_word_html_and_rtf", "crates/ui-egui/tests/compare.rs::export_to_word_html_and_rtf"]
-notes = "Flowing Word document: paragraphs, Heading 1/2 from larger text, bold/italic, images inline, page breaks, and detected tables with spans/empty cells; checked with macOS textutil. Not yet: columns, fonts and colours, exact layout mode."
+evidence = ["crates/export/src/lib.rs::docx_is_a_word_package", "crates/export/src/lib.rs::grid_text_becomes_a_real_table_in_every_format", "crates/export/src/lib.rs::word_opens_text_with_control_characters_and_long_pages", "crates/engine/src/tests.rs::exporting_office_files_keeps_images", "crates/automation/tests/automation.rs::exporting_to_word_html_and_rtf", "crates/ui-egui/tests/compare.rs::export_to_word_html_and_rtf"]
+notes = "Flowing Word document: paragraphs, Heading 1/2 from larger text, bold/italic, images inline, page breaks, and detected tables with spans/empty cells; checked with macOS textutil and opened in Microsoft Word (Windows). Characters XML forbids are dropped; the page size stays within Word's 22 in. Not yet: columns, fonts and colours, exact layout mode."
 
 [[feature]]
 id = "create.export-rtf"
@@ -6862,7 +6874,7 @@ milestone = "M10"
 status = "shipped"
 commands = ["export.rtf"]
 tools = ["doc_export_office"]
-evidence = ["crates/export/src/lib.rs::rtf_escapes_and_sizes", "crates/automation/tests/automation.rs::exporting_to_word_html_and_rtf", "crates/ui-egui/tests/compare.rs::export_to_word_html_and_rtf"]
+evidence = ["crates/export/src/lib.rs::rtf_escapes_and_sizes", "crates/export/src/lib.rs::word_opens_text_with_control_characters_and_long_pages", "crates/automation/tests/automation.rs::exporting_to_word_html_and_rtf", "crates/ui-egui/tests/compare.rs::export_to_word_html_and_rtf"]
 notes = "Paragraphs with sizes, bold, italic, Unicode; page breaks. Images are left out."
 
 [[feature]]
@@ -9351,7 +9363,7 @@ status = "shipped"
 commands = []
 tools = ["doc_info", "text_extract", "page_render"]
 evidence = ["crates/automation/tests/automation.rs::mcp_resources_expose_open_documents", "crates/automation/src/mcp.rs::resource_uris_parse"]
-notes = "resources/list, resources/templates/list and resources/read: printcraft://doc/{doc}/info (JSON), /text, /page/{page}/text, /page/{page}/image?dpi= (PNG)"
+notes = "resources/list, resources/templates/list and resources/read: pdfcraft://doc/{doc}/info (JSON), /text, /page/{page}/text, /page/{page}/image?dpi= (PNG)"
 
 [[feature]]
 id = "misc.ui-control-channel"
@@ -9794,8 +9806,8 @@ milestone = "M14"
 status = "partial"
 commands = []
 tools = []
-evidence = ["crates/ui-egui/src/i18n.rs::language_persists_and_invalid_input_keeps_current_language"]
-notes = "Preferences switches English/Japanese/Czech and persists; ui.set language en|ja|cs and ui.state expose it. Czech covers every registered menu command (tested); Japanese covers the core menu labels. Dialog/panel translations and more languages remain open."
+evidence = ["crates/ui-egui/src/i18n/mod.rs::language_persists_and_invalid_input_keeps_current_language", "crates/ui-egui/src/i18n/mod.rs::bundled_catalogs_are_consistent", "crates/ui-egui/tests/control.rs::language_switch_preserves_document_and_command_ids"]
+notes = "Preferences switches Auto (system language)/English/Japanese/Brazilian Portuguese and persists; ui.set language auto|en|ja|pt-br and ui.state expose it. TSV catalogs per language (same system as PhotoCraft). Core menu labels translated; dialogs, panels, Windows system-language detection and more languages remain open."
 
 [[feature]]
 id = "misc.prefs-reading"
